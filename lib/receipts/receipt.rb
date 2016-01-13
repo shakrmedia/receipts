@@ -6,12 +6,13 @@ module Receipts
     attr_reader :attributes, :id, :company, :custom_font, :line_items, :logo, :message, :product
 
     def initialize(attributes)
-      @attributes  = attributes
-      @id          = attributes.fetch(:id)
-      @company     = attributes.fetch(:company)
-      @line_items  = attributes.fetch(:line_items)
-      @custom_font = attributes.fetch(:font, {})
-      @message     = attributes.fetch(:message) { default_message }
+      @attributes     = attributes
+      @id             = attributes.fetch(:id)
+      @company        = attributes.fetch(:company)
+      @line_items     = attributes.fetch(:line_items)
+      @custom_font    = attributes.fetch(:font, {})
+      @header_message = attributes.fetch(:header_message) { "RECEIPT FOR CHARGE" }
+      @message        = attributes.fetch(:message) { default_message }
 
       super(margin: 0)
 
@@ -50,7 +51,7 @@ module Receipts
         end
 
         move_down 8
-        text "<color rgb='a6a6a6'>RECEIPT FOR CHARGE ##{id}</color>", inline_format: true
+        text "<color rgb='a6a6a6'>#{attributes.fetch(:header_message)} ##{id}</color>", inline_format: true
 
         move_down 30
         text message, inline_format: true, size: 12.5, leading: 4
